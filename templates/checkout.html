@@ -1,0 +1,152 @@
+{% extends "home.html"%}
+{% load static %}
+    {% block content%}
+    <div class="row">
+		<div class="col-lg-6">
+			<div class="box-element" id="form-wrapper">
+				<form id="form">
+					<div id="user-info">
+						<div class="form-field">
+							<input required class="form-control" type="text" name="name" placeholder="Name..">
+						</div>
+						<div class="form-field">
+							<input required class="form-control" type="email" name="email" placeholder="Email..">
+						</div>
+					</div>
+					{% if order.is_shipping %}
+					<div id="shipping-info">
+						<hr>
+						<p>Shipping Information:</p>
+						<hr>
+						<div class="form-field">
+							<input class="form-control" type="text" name="address" placeholder="Address..">
+						</div>
+						<div class="form-field">
+							<input class="form-control" type="text" name="city" placeholder="City..">
+						</div>
+						<div class="form-field">
+							<input class="form-control" type="text" name="state" placeholder="State..">
+						</div>
+						<div class="form-field">
+							<input class="form-control" type="text" name="zipcode" placeholder="Zip code..">
+						</div>
+						<div class="form-field">
+							<input class="form-control" type="text" name="country" placeholder="Zip code..">
+						</div>
+					</div>
+					{% endif %}
+
+					<hr>
+					<input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
+				</form>
+			</div>
+
+			<br>
+			<div class="box-element hidden" id="payment-info">
+				<h3>Payment Options:</h3>
+				<br>
+				<p>PayPal <input type="radio" name="payment_option"  value="PayPal"> </p>
+				<p>Cash On Delievery <input type="radio" name="payment_option" checked value="cash"> </p>
+				<br>
+				<button id="make_payment" class="btn btn-success " >Make payment</button>
+			</div>
+			
+		</div>
+
+		<div class="col-lg-6">
+			<div class="box-element">
+				<a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+				<hr>
+				<h3>Order Summary</h3>
+				<hr>
+				{% for item in items%}
+				<div class="cart-row">
+					<div style="flex:2"><img class="row-image" src="{{item.Product.imageUrl }}"></div>
+					<div style="flex:2"><p>{{ item.Product.name }}</p></div>
+					<div style="flex:1"><p>{{ item.Product.price }}</p></div>
+					<div style="flex:1"><p>{{ item.quantity }}</p></div>
+				</div>
+				{% endfor %}
+				<h5>Items: {{ order.get_order_quantity }}</h5>
+				<h5>Total: {{ order.get_order_total|floatformat:2 }}   </h5>
+			</div>
+		</div>
+	</div>
+	
+	<br>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="box-element">
+			<h2>Previous Orders:</h2>
+			<br>
+				{% for order in complete_orders %}
+				<div class="cart-row">
+					<div style="flex:1"><img class="row-image" src="{{ order.get_first_img }}"></div>
+					<div style="flex:1"><p>Customer: {{ order.Customer.name }} </p></div>
+					<div style="flex:2"><p> Date Ordered: {{ order.date_ordered }}</p></div>
+					<div style="flex:2"><p>Transaction Id: {{order.transaction_id }}</p></div>
+					<div style="flex:1"><p>Total Paid: {{order.get_order_total|floatformat:2 }}$</p></div>
+
+				</div>
+				{% endfor %}
+		</div>
+		<div style="height:200px;"></div>
+		</div>
+	</div>
+   
+		
+
+
+	<script type="text/javascript">
+	let form=document.getElementById('form');
+
+	let user = '{{request.user}}'
+	let shipping='{{ order.is_shipping }}'
+
+	if( user !='AnonymousUser'){
+		document.getElementById("user-info").innerHTML=""
+	}
+
+	if( shipping=="False" && user != "AnonymousUser"){
+		document.getElementById("form-wrapper").classList.add("hidden");
+		document.getElementById("payment-info").classList.remove("hidden");
+
+	}
+
+	form.addEventListener('submit',function(e){	
+			e.preventDefault();
+			console.log(e)
+			console.log("form sunmitted")
+			document.getElementById("form-button").classList.add("hidden");
+			document.getElementById("payment-info").classList.remove("hidden");
+
+	})
+
+	document.getElementById("make_payment").addEventListener("click",function(e){
+
+		 fetch("/process_order/",{
+
+        method:"post",
+        headers:{
+
+            'Content-Type':'application/json',
+            'X-CSRFToken':csrftoken,
+
+        },
+        body: JSON.stringify({"empty":""})
+    })
+    .then( (response) =>{
+        return response.json()
+    })
+    .then( (data) => {
+
+        window.location.replace("{% url 'store' %}");
+     })
+		
+		
+	})
+
+	</script>
+
+
+    {% endblock %}

@@ -1,0 +1,71 @@
+{% extends "home.html" %}
+{% load static %}
+
+{% block fluid%}
+<div id="policy_bar">
+    Free delivery above £50 (Exceptions apply)
+</div>
+<div id="product_container" class="row">
+    <div id="product_img_container" class="col-lg-9">
+        
+        <img id="product_img" src="{{product.imageUrl}}" alt="">
+        <div id="product_description">
+            <br>
+            <h1>Description</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                Excepteur sint occaecat cupidatat non proident,
+                 sunt in culpa qui officia deserunt mollit anim id est laborum."
+            </p>
+        </div>
+    </div>
+    
+    
+    <div id="details_container" class="col-lg-3">
+        <p id="product_name">{{product.name}}</p>
+        <p id="price_tag">{{product.price}}$</p>
+        <p>Color:Black/White/Yellow</p>
+        <br>
+        <div class="dropdown" id="shipping_container">
+            <p><small>Shipping:</small><strong> choose shipping method </strong></p>
+            <div class="dropdown-content">
+                <a href="#">Option 1</a>
+                <a href="#">Option 2</a>
+                <a href="#">Option 3</a>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <button data-product="{{product.id}}" data-action="add"  
+        class="btn btn-outline-secondary add-btn update_cart " id="details_add_btn"> <img id="in_btn_cart" src="{% static 'img/cart.png' %}"> Add to cart</button>
+        <p style="font-size: 12px;">Free delivery above £50 (Exceptions apply)</p>
+        <br>
+        <div id="other_pics">
+                
+            <img src="{% static 'img/cart.png' %}" alt="">
+            <img src="{% static 'img/cart.png' %}" alt="">
+            <img src="{% static 'img/cart.png' %}" alt="">
+                
+        </div>
+        
+        <br>
+    
+        <div style="float: none;"></div>
+        <div id="share_it">
+            <p>SHARE IT! 
+                <a href="#"><i class="fab fa-facebook-square"></i></a>
+                <a href="#"><i class="fab fa-pinterest-square"></i></a>
+                <a href="#"><i class="fa fa-envelope"></i></a>
+                <a href="#"><i class="fab fa-whatsapp-square"></i></a>
+            </p>
+            
+        </div>
+
+    </div>
+  
+    
+</div>
+
+<!-- <div style="height: 100px;"></div>> -->
+
+{% endblock %}

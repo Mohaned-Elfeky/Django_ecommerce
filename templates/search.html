@@ -1,0 +1,37 @@
+{% extends "home.html"%}
+{% load static %}
+
+{% block content%}
+
+<div id="search_title">
+    <h2><span>Search Results</span></h2>
+</div>
+<br>
+<br>
+<br>
+
+<p id="results_number">Showing {{numberof_results}} results for '{{search_key}}' :</p>
+
+<div class="row">
+    {% for product in results%}
+    <div class="col-lg-4">
+        <img class="thumbnail" src="{{product.imageUrl}}" alt="">
+        <div class="box-element product">
+            <h6><strong>{{product.name}}</strong></h6>
+            <hr>
+        <button data-product="{{product.id}}" data-action="add"  class="btn btn-outline-secondary add-btn update_cart add_btn">Add to cart</button>
+            <a href="/product/{{product.name|cut:' '}}/{{product.id}}" class="btn btn-outline-success  view-link view_btn">View</a>
+            <h4 class="price-tag">{{product.price|floatformat:2}}$</h4>
+
+        </div>
+    </div>
+    {% endfor%}
+</div>
+{% if results%}
+<div style="height: 100px;"></div>
+{% else %}
+<h4>No results found</h4>
+<div style="height: 400px;"></div>
+{% endif%}
+
+{% endblock%}

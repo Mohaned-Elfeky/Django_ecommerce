@@ -85,6 +85,11 @@ DATABASES = {
     }
 }
 
+import dj_database_url
+db_from_env=dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -136,9 +141,8 @@ MEDIA_ROOT=os.path.join(BASE_DIR,'static/img')
 LOGOUT_REDIRECT_URL = 'login'
 
 
-
 AWS_ACCESS_KEY_ID=os.environ['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY=os.environ[' AWS_SECRET_ACCESS_KEY']
+AWS_SECRET_ACCESS_KEY=os.environ['AWS_SECRET_ACCESS_KEY']
 
 
 AWS_STORAGE_BUCKET_NAME="django--ecomm"

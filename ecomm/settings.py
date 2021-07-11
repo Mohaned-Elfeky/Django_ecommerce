@@ -78,10 +78,7 @@ WSGI_APPLICATION = 'ecomm.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+  
 }
 
 import dj_database_url
@@ -125,17 +122,22 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-STATIC_ROOT=os.path.join(BASE_DIR,'assets')
-
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS=[
-os.path.join(BASE_DIR,'static')
-]
+# STATIC_ROOT=os.path.join(BASE_DIR,'assets')
 
 
-MEDIA_URL='/media/'
+
+# STATICFILES_DIRS=[
+# os.path.join(BASE_DIR,'static')
+# ]
+
+
 MEDIA_ROOT=os.path.join(BASE_DIR,'static/img')
+
+
+STATIC_URL = AWS_URL + '/static/'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+MEDIA_URL = AWS_URL + '/media/'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 LOGOUT_REDIRECT_URL = 'login'
 
@@ -146,11 +148,12 @@ AWS_SECRET_ACCESS_KEY=os.environ['AWS_SECRET_ACCESS_KEY']
 
 AWS_STORAGE_BUCKET_NAME="django--ecomm"
 AWS_S3_REGION_NAME = "us-east-2"
+AWS_URL='https://django--ecomm.s3.amazonaws.com/'
 
 AWS_S3_FILE_OVERWRITE=False
 AWS_DEFAULT_ACL= None
 
 # AWS_LOCATION="img/"
 
-DEFAULT_FILE_STORAGE='storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE='storages.backends.s3boto3.S3Boto3Storage'
+import django_heroku
+django_heroku.settigns(locals(), staticfiles=False)

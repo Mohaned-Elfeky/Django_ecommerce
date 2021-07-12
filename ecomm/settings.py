@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,6 +44,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -78,13 +78,28 @@ WSGI_APPLICATION = 'ecomm.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'd63ahgspbi83l8',
+#         'USER': 'mwenviyxpwggjn',
+#         'PASSWORD': '78afbdf3f00f593bd5a49f2f2aae2ffbc3720f9f57e62c117c6b765e75608964',
+#         'HOST': 'ec2-52-208-175-161.eu-west-1.compute.amazonaws.com',
+#         'PORT': '5432',
+#     }
+# }
+
 DATABASES = {
-  
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
-import dj_database_url
-db_from_env=dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
+
+# import dj_database_url
+# db_from_env=dj_database_url.config(conn_max_age=600)
+# DATABASES['default'].update(db_from_env)
 
 
 
@@ -123,38 +138,32 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-# STATIC_ROOT=os.path.join(BASE_DIR,'assets')
+STATIC_ROOT=os.path.join(BASE_DIR,'assets')
+
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS=[
+os.path.join(BASE_DIR,'static')
+]
 
 
-
-# STATICFILES_DIRS=[
-# os.path.join(BASE_DIR,'static')
-# ]
-
-
+MEDIA_URL='/static/img/'
 MEDIA_ROOT=os.path.join(BASE_DIR,'static/img')
 
 
-STATIC_URL = AWS_URL + '/static/'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_URL = AWS_URL + '/media/'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-LOGOUT_REDIRECT_URL = 'login'
 
 
-AWS_ACCESS_KEY_ID=os.environ['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY=os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_ACCESS_KEY_ID='AKIAZL46H4QPMZIBYNMF'
+AWS_SECRET_ACCESS_KEY='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'
 
 
 AWS_STORAGE_BUCKET_NAME="django--ecomm"
 AWS_S3_REGION_NAME = "us-east-2"
-AWS_URL='https://django--ecomm.s3.amazonaws.com/'
 
 AWS_S3_FILE_OVERWRITE=False
 AWS_DEFAULT_ACL= None
 
 # AWS_LOCATION="img/"
 
-
-django_heroku.settigns(locals(), staticfiles=False)
+DEFAULT_FILE_STORAGE='storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE='storages.backends.s3boto3.S3Boto3Storage'
